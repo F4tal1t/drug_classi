@@ -1,16 +1,28 @@
 import streamlit as st
 import pickle
 import numpy as np
+import os
+
+# Get the current script's directory
+current_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Load the saved model and encoders
 @st.cache_resource
 def load_model_and_encoders():
-    with open("drug_classifier_model.pkl", "rb") as model_file:
+    model_path = os.path.join(current_dir, "drug_classifier_model.pkl")
+    encoders_path = os.path.join(current_dir, "label_encoders.pkl")
+
+    # Load the model
+    with open(model_path, "rb") as model_file:
         model = pickle.load(model_file)
-    with open("label_encoders.pkl", "rb") as encoders_file:
+
+    # Load the encoders
+    with open(encoders_path, "rb") as encoders_file:
         encoders = pickle.load(encoders_file)
+
     return model, encoders
 
+# Load model and encoders
 model, encoders = load_model_and_encoders()
 
 # Streamlit app interface
@@ -41,4 +53,6 @@ if st.button("Predict"):
 
 # Footer
 st.write("---")
+
+
 
